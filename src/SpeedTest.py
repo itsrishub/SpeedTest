@@ -24,8 +24,6 @@ class DiskSpeed:
         f = os.open(self.path, os.O_CREAT | os.O_WRONLY, 0o777)
         w_times = []
         for i in range(blocks_count):
-            sys.stdout.write('\rWriting: {:.2f} %'.format(
-                    (i + 1) * 100 / blocks_count))
             sys.stdout.flush()
             buff = os.urandom(block_size)
             start = time()
@@ -143,14 +141,14 @@ class App(customtkinter.CTk):
                                                    fg_color=("white", "gray38"),  # <- custom tuple-color
                                                    justify=tkinter.LEFT)
         self.label_info_1.grid(column=0, row=0, sticky="we", padx=15, pady=15)
-        progressbar = customtkinter.CTkProgressBar(master=self.frame_info)
-        progressbar.grid(row=1, column=0, sticky="ew", padx=15, pady=15)
-        progressbar.set(0)
+        self.progressbar = customtkinter.CTkProgressBar(master=self.frame_info)
+        self.progressbar.grid(row=1, column=0, sticky="ew", padx=15, pady=15)
+        self.progressbar.set(0)
         
         for i in range(0, 11, 1):
-            progressbar.set(i/10)
+            self.progressbar.set(i/10)
             sleep(0.2)
-        progressbar.grid_forget()
+        self.progressbar.grid_forget()
         self.label_info_1 = customtkinter.CTkLabel(master=self.frame_info,
                                                    text="\n\tResult\n\nWrite Speed: {:.2f} MB/s\n\n".format(results['Write Speed']) +
                                                         "Read Speed: {:.2f} MB/S\n".format(results['Read Speed']),
@@ -160,7 +158,6 @@ class App(customtkinter.CTk):
         self.label_info_1.grid(column=0, row=0, sticky="we", padx=15, pady=15)
 
     def test(self):
-        
         threading.Thread(target=self.foo).start()
 
         
